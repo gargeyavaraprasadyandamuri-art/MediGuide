@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediGuide — Smart Healthcare Symptom Guidance & Doctor Discovery</title>
+  <meta name="description" content="Futuristic clinical care-navigation website with an interactive biometric body hologram scanner, rule-based specialty guidance, live ECG telemetry, and nearby doctor discovery.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/body-diagram.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+</head>
+<body data-theme="dark">
+
+  <!-- 1. Top Emergency Safety Disclaimer Bar -->
+  <div class="emergency-top-bar" id="top-emergency-bar">
+    <span class="emergency-pulse"></span>
+    <span data-i18n="emergency_notice"><strong>Care-Navigation Notice:</strong> MediGuide provides educational care navigation, NOT a medical diagnosis. For life-threatening emergencies, dial 911 / 112 immediately.</span>
+    <button class="emergency-hotline-btn open-emergency-modal" type="button" data-i18n="emergency_btn">Emergency Hotlines 🚨</button>
+  </div>
+
+  <!-- 2. Sticky Glassmorphic Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="#" class="nav-brand">
+        <div class="brand-icon-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2v20M2 12h20"></path>
+          </svg>
+        </div>
+        <div>
+          <span class="brand-title">MediGuide</span>
+          <span class="brand-sub">Holo-Symptom Guidance</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#interactive-body-section" class="nav-link" data-i18n="nav_body">Body Hologram</a></li>
+          <li><a href="#symptom-form-section" class="nav-link" data-i18n="nav_checker">Symptom Checker</a></li>
+          <li><a href="#care-guidance-section" class="nav-link" data-i18n="nav_guidance">Care Guidance</a></li>
+          <li><a href="#find-doctors-section" class="nav-link" data-i18n="nav_doctors">Find Doctors</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Language Switcher (EN | తెలుగు | हिन्दी) -->
+        <div class="lang-switcher-group" title="Select Language / భాష ఎంచుకోండి / भाषा चुनें">
+          <button type="button" class="lang-btn active" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="te">తెలుగు</button>
+          <button type="button" class="lang-btn" data-lang="hi">हिन्दी</button>
+        </div>
+
+        <!-- Sound Chime Toggle -->
+        <button class="btn-audio-toggle active" id="btn-sound-toggle" type="button" title="Toggle Audio Feedback">
+          🔊
+        </button>
+
+        <!-- Theme Switcher (Dark Hologram / Light Glass) -->
+        <button class="btn-theme-toggle" id="btn-theme-toggle" type="button" title="Switch Theme">
+          🌙
+        </button>
+
+        <!-- Database Engine Status Pill -->
+        <button class="db-status-pill" id="db-status-badge" type="button" title="Database Configuration">
+          <span class="db-status-dot"></span> DB: Loading...
+        </button>
+
+        <!-- Emergency Hotline Button -->
+        <button class="btn-emergency-nav open-emergency-modal" type="button">
+          <span>🚨</span> <span data-i18n="nav_emergency">112 / 911</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. Futuristic Hero Section with Live ECG Telemetry -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-badge-pill">
+            <span>🛡️</span> <span data-i18n="hero_badge">Transparent Clinical Rule Logic — Not A Diagnostic Guess</span>
+          </div>
+
+          <h1 class="hero-title">
+            <span data-i18n="hero_title_1">Smart Healthcare</span> <span class="glow-cyan" data-i18n="hero_title_glow">Symptom Guidance</span> &amp; <span class="gradient-text" data-i18n="hero_title_2">Doctor Discovery</span>
+          </h1>
+
+          <p class="hero-description" data-i18n="hero_desc">
+            Explore the biometric body hologram to locate where it hurts, evaluate symptoms against clinical safety rules, and discover exactly which doctor specialty to consult — with verified nearby doctors and directions.
+          </p>
+
+          <div class="hero-cta-row">
+            <a href="#interactive-body-section" class="btn btn-primary">
+              <span>🧍</span> <span data-i18n="hero_btn_scan">Launch Hologram Scanner</span>
+            </a>
+            <a href="#symptom-form-section" class="btn btn-outline">
+              <span>🔍</span> <span data-i18n="hero_btn_symptoms">Evaluate Symptoms</span>
+            </a>
+            <button class="btn btn-danger open-emergency-modal" type="button">
+              <span>⚠️</span> <span data-i18n="hero_btn_redflags">Safety Red Flags</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live ECG Telemetry Card & Image Visual -->
+        <div>
+          <div class="hero-ecg-monitor-card">
+            <div class="ecg-header-row">
+              <span class="ecg-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span data-i18n="telemetry_title">LIVE TELEMETRY MONITOR</span>
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--success); font-weight: 700;" data-i18n="telemetry_status">
+                ● SYSTEM OPERATIONAL
+              </span>
+            </div>
+
+            <!-- Real-time HTML5 ECG Pulse Wave Canvas -->
+            <div class="ecg-canvas-wrapper">
+              <canvas id="ecg-canvas"></canvas>
+            </div>
+
+            <!-- Vitals Telemetry Grid -->
+            <div class="vitals-telemetry-grid">
+              <div class="telemetry-cell">
+                <div class="telemetry-val" id="ecg-bpm-readout">74</div>
+                <div class="telemetry-label" data-i18n="telemetry_hr">Heart Rate (BPM)</div>
+              </div>
+              <div class="telemetry-cell">
+                <div class="telemetry-val" style="color: #38bdf8;">98%</div>
+                <div class="telemetry-label" data-i18n="telemetry_spo2">SpO2 Oxygen</div>
+              </div>
+              <div class="telemetry-cell">
+                <div class="telemetry-val" style="color: var(--teal);" data-i18n="telemetry_engine">Rule-Engine</div>
+                <div class="telemetry-label">Deterministic</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Metrics Strip -->
+      <div class="trust-metrics-row">
+        <div class="metric-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-i18n="metric_1">Holographic Anatomical Scanner</span>
+        </div>
+        <div class="metric-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-i18n="metric_2">15+ Medical Specialties</span>
+        </div>
+        <div class="metric-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-i18n="metric_3">Explainable Care Pathways</span>
+        </div>
+        <div class="metric-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-i18n="metric_4">Verified Nearby Doctors &amp; Maps</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Main App Interactive Grid -->
+  <main class="container">
+    <div class="app-main-grid">
+
+      <!-- LEFT COLUMN: Biometric Body Hologram Scanner -->
+      <section class="body-diagram-card card" id="interactive-body-section">
+        <div class="diagram-header-bar">
+          <div>
+            <span class="section-tag" data-i18n="step1_tag">Anatomical Telemetry</span>
+            <h2 class="section-title" data-i18n="step1_title">Biometric Hologram Scanner</h2>
+          </div>
+
+          <!-- Front / Back Perspective Toggles -->
+          <div class="view-toggle-group">
+            <button class="view-toggle-btn active" id="btn-view-front" type="button">
+              <span>👤</span> <span data-i18n="view_front">Front Scan</span>
+            </button>
+            <button class="view-toggle-btn" id="btn-view-back" type="button">
+              <span>🔄</span> <span data-i18n="view_back">Dorsal / Spine</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Organ Systems Filter Ribbon -->
+        <div class="organ-systems-nav" id="organ-systems-nav">
+          <!-- Populated by BodyDiagramController -->
+        </div>
+
+        <!-- Hologram Diagram Canvas Container with Laser Scan Beam -->
+        <div class="diagram-canvas-container">
+          <div class="hologram-scanner-beam"></div>
+          <div class="body-svg-wrapper" id="body-svg-container">
+            <!-- Dynamically generated anatomical SVG -->
+          </div>
+          <!-- Floating Zone Tooltip -->
+          <div class="body-zone-tooltip" id="body-zone-tooltip"></div>
+        </div>
+
+        <!-- Biometric Scan HUD Readout Panel -->
+        <div class="selected-area-banner" id="selected-area-banner">
+          <div class="selected-area-details">
+            <div class="selected-area-icon" id="selected-area-icon">⚡</div>
+            <div>
+              <h4 class="selected-area-title" id="selected-area-title" data-i18n="hud_all_title">Full Body Telemetry Scan</h4>
+              <p class="selected-area-desc" id="selected-area-desc" data-i18n="hud_all_desc">Scan active across all biological organ systems</p>
+            </div>
+          </div>
+          <button class="btn-filter-area" type="button" data-i18n="hud_filter_btn" onclick="document.getElementById('symptom-search-input').focus()">
+            Filter Symptoms →
+          </button>
+        </div>
+
+        <!-- Quick Region Filter Pills -->
+        <div class="body-part-pills-row" id="body-pills-row">
+          <!-- Dynamically populated buttons -->
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Symptom Search & Clinical Parameters Form -->
+      <section class="symptom-form-card card" id="symptom-form-section">
+        <div class="section-header">
+          <span class="section-tag" data-i18n="step2_tag">Clinical Parameters</span>
+          <h2 class="section-title" data-i18n="step2_title">Symptom Evaluation Form</h2>
+          <p class="section-subtitle" data-i18n="step2_desc">
+            Search symptoms and specify duration, pain level, and severity to trigger care rules.
+          </p>
+        </div>
+
+        <!-- Live Symptom Search -->
+        <div class="form-group">
+          <label class="form-label" for="symptom-search-input">
+            <span data-i18n="search_label">Search Symptoms</span> <span class="form-label-hint" data-i18n="search_hint">(e.g., headache, chest tightness, knee pain, rash)</span>
+          </label>
+          <div class="search-input-wrapper">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="symptom-search-input" class="form-control-search" placeholder="Type to filter symptoms instantly..." data-i18n="search_placeholder" />
+          </div>
+        </div>
+
+        <!-- Primary Symptom Selection List -->
+        <div class="form-group">
+          <label class="form-label">
+            <span data-i18n="primary_label">Primary Symptom</span> <span class="form-label-hint" data-i18n="primary_hint">(Select the primary reason for your concern)</span>
+          </label>
+          <div class="symptom-selection-scroll" id="symptoms-list-container">
+            <!-- Dynamically populated symptom cards -->
+          </div>
+        </div>
+
+        <!-- Secondary Associated Symptoms -->
+        <div class="form-group" style="margin-top: 1.25rem;">
+          <label class="form-label">
+            <span data-i18n="associated_label">Associated Symptoms</span> <span class="form-label-hint" data-i18n="associated_hint">(Optional — select any other symptoms occurring together)</span>
+          </label>
+          <div class="secondary-symptoms-chips" id="secondary-symptoms-container">
+            <!-- Multi-select chips -->
+          </div>
+        </div>
+
+        <!-- Interactive 1-10 Pain Scale Dial Slider -->
+        <div class="form-group">
+          <label class="form-label" data-i18n="pain_dial_label">Pain / Discomfort Intensity Dial</label>
+          <div class="pain-scale-container">
+            <div class="pain-scale-header">
+              <div class="pain-level-indicator">
+                <span class="pain-emoji" id="pain-emoji">😐</span>
+                <div>
+                  <strong style="display: block; font-size: 0.95rem; color: var(--text-heading);" id="pain-level-label">Moderate (Interferes with Activities)</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-dim);" data-i18n="pain_dial_sub">Slide to adjust perceived severity</span>
+                </div>
+              </div>
+              <span class="pain-score-badge" id="pain-score-badge">5 / 10</span>
+            </div>
+
+            <input type="range" min="1" max="10" value="5" class="pain-slider" id="pain-intensity-slider" />
+            <div class="pain-ticks-row">
+              <span>1 Mild</span>
+              <span>3 Manageable</span>
+              <span>5 Moderate</span>
+              <span>8 Severe</span>
+              <span>10 Emergency</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Symptom Duration Chips -->
+        <div class="form-group">
+          <label class="form-label" data-i18n="dur_label">Duration of Symptoms</label>
+          <div class="duration-selector-grid">
+            <button type="button" class="duration-chip-btn" data-duration="hours" data-i18n="dur_hours">&lt; 24 Hours</button>
+            <button type="button" class="duration-chip-btn active" data-duration="days_1_3" data-i18n="dur_days_1_3">1–3 Days</button>
+            <button type="button" class="duration-chip-btn" data-duration="days_4_7" data-i18n="dur_days_4_7">4–7 Days</button>
+            <button type="button" class="duration-chip-btn" data-duration="weeks_1_2" data-i18n="dur_weeks_1_2">1–2 Weeks</button>
+            <button type="button" class="duration-chip-btn" data-duration="chronic" data-i18n="dur_chronic">&gt; 2 Weeks (Chronic)</button>
+          </div>
+        </div>
+
+        <!-- Patient Demographics & Location -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <label class="form-label" for="patient-age-select" data-i18n="patient_group_label">Patient Group</label>
+            <select id="patient-age-select" class="filter-select" style="width: 100%;">
+              <option value="adult" data-i18n="age_adult" selected>Adult (18–64 years)</option>
+              <option value="senior" data-i18n="age_senior">Senior (65+ years)</option>
+              <option value="pediatric" data-i18n="age_child">Child / Adolescent (0–17 years)</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" for="patient-city-select" data-i18n="location_label">Location / City</label>
+            <select id="patient-city-select" class="filter-select" style="width: 100%;">
+              <option value="Chennai" selected>Chennai</option>
+              <option value="Bangalore">Bangalore</option>
+              <option value="Delhi">Delhi</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Emergency Red Flags Accordion Checklist -->
+        <div class="emergency-redflag-box">
+          <div class="redflag-header" id="redflag-header-toggle">
+            <div class="redflag-title-row">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span data-i18n="redflag_title">Emergency Warning Check (Critical Safety Signs)</span>
+            </div>
+            <span class="redflag-toggle-icon" id="redflag-icon">▼</span>
+          </div>
+          <div class="redflag-content" id="redflag-content">
+            <p style="font-size: 0.8rem; color: #fda4af; margin-bottom: 0.75rem;" data-i18n="redflag_desc">
+              If any of these critical warning signs apply, check them below. MediGuide will immediately prioritize emergency triage.
+            </p>
+            <div id="redflag-items-container">
+              <!-- Dynamically populated red flag checkboxes -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="button" class="btn btn-primary" id="btn-evaluate-symptoms" style="width: 100%; margin-top: 1.5rem; padding: 1.1rem; font-size: 1.1rem;">
+          <span>🩺</span> <span data-i18n="btn_evaluate">Get Care Guidance &amp; Doctor Recommendation</span>
+        </button>
+      </section>
+
+    </div>
+
+    <!-- 5. Care Guidance Results Section -->
+    <section class="guidance-section" id="care-guidance-section">
+      
+      <!-- Emergency Warning Box -->
+      <div id="guidance-emergency-box" style="display: none;"></div>
+
+      <!-- Triage Category Banner -->
+      <div class="triage-header-banner" id="guidance-triage-banner">
+        <!-- Triage Level & Badge -->
+      </div>
+
+      <!-- Diagnostic Pathway Flow -->
+      <div id="guidance-pathway-container"></div>
+
+      <!-- Primary Specialist Hero Card -->
+      <div class="specialty-hero-card" id="guidance-specialty-card">
+        <!-- Rendered by GuidanceController -->
+      </div>
+
+      <!-- Digital Healthcare Referral Passport Slip -->
+      <div id="guidance-passport-container"></div>
+
+      <!-- Transparent Clinical Reasoning Chain -->
+      <div class="reasoning-accordion">
+        <div class="reasoning-accordion-header" id="reasoning-header-toggle">
+          <div class="reasoning-accordion-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span data-i18n="guidance_reasoning_title">Transparent Rule-Based Guidance Logic (Why this specialist was suggested)</span>
+          </div>
+          <span style="font-size: 0.85rem; color: var(--neon-cyan); font-weight: 700;">Toggle Details ▾</span>
+        </div>
+        <div id="reasoning-content" style="display: block;">
+          <div class="reasoning-timeline" id="guidance-reasoning-timeline">
+            <!-- Step by step rule application audit -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Doctor Appointment Preparation Checklist -->
+      <div class="checklist-card" id="guidance-checklist-container">
+        <!-- Checklist items -->
+      </div>
+
+      <!-- Legal Disclaimer Callout -->
+      <div class="disclaimer-box" data-i18n="guidance_disclaimer">
+        Clinical Navigation Disclaimer: MediGuide provides transparent care-navigation advice to assist patients in selecting suitable medical disciplines and recognizing emergency warning signs. It is NOT a medical diagnosis and cannot replace in-person clinical examinations.
+      </div>
+
+      <!-- Summary Export / Print Actions -->
+      <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+        <button class="btn btn-outline" id="btn-print-summary" type="button">
+          <span>🖨️</span> <span data-i18n="btn_print">Print / Export Care Guidance Summary</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 6. Nearby Doctor Discovery Section -->
+    <section class="doctor-discovery-section" id="find-doctors-section">
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="section-tag" data-i18n="step4_tag">Direct Doctor Discovery</span>
+          <h2 class="section-title" data-i18n="step4_title">Nearby Verified Doctors &amp; Clinics</h2>
+          <p class="section-subtitle" data-i18n="step4_desc">
+            Find specialists matching your guidance recommendation with directions and direct booking.
+          </p>
+        </div>
+        <span id="doctors-count-badge" style="background: var(--surface-card-subtle); border: 1px solid var(--border-glass); color: var(--neon-cyan); padding: 0.4rem 1rem; border-radius: var(--radius-full); font-size: 0.82rem; font-weight: 800; font-family: var(--font-mono);">
+          Loading verified specialists...
+        </span>
+      </div>
+
+      <!-- Search & Filters Bar -->
+      <div class="doctor-filters-bar">
+        <div class="doctor-filter-item">
+          <label style="font-size: 0.82rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase;" data-i18n="filter_specialty">Specialty:</label>
+          <select id="doctor-specialty-filter" class="filter-select">
+            <option value="all" data-i18n="filter_all_specialties">All Specialties</option>
+          </select>
+        </div>
+
+        <div class="doctor-filter-item">
+          <label style="font-size: 0.82rem; font-weight: 800; color: var(--text-dim); text-transform: uppercase;" data-i18n="filter_city">City:</label>
+          <select id="doctor-city-filter" class="filter-select">
+            <option value="all" data-i18n="filter_all_cities">All Locations</option>
+          </select>
+        </div>
+
+        <div class="doctor-filter-item" style="flex: 1; min-width: 200px;">
+          <input type="text" id="doctor-query-input" class="form-control-search" style="padding-left: 1rem;" placeholder="Search doctor or clinic name..." />
+        </div>
+
+        <button type="button" class="btn-gps-location" id="btn-use-gps">
+          <span>📍</span> <span data-i18n="btn_gps">Use My Current Location</span>
+        </button>
+      </div>
+
+      <!-- Doctors Grid -->
+      <div class="doctors-grid" id="doctors-grid">
+        <!-- Doctor Cards -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 7. Modals -->
+
+  <!-- A. Appointment Booking Modal -->
+  <div class="modal-backdrop" id="booking-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Request Doctor Consultation</h3>
+        <button class="modal-close-btn modal-close-trigger" type="button">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="booking-form">
+          <div style="background: var(--surface-card-subtle); border: 1px solid var(--border-glass); padding: 1.15rem; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+            <h4 id="booking-doc-name" style="font-size: 1.25rem; color: var(--neon-cyan); margin-bottom: 0.2rem;">Doctor Name</h4>
+            <p id="booking-clinic-name" style="font-size: 0.86rem; color: var(--text-muted);">Clinic Information</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="booking-patient-name">Patient Full Name</label>
+            <input type="text" id="booking-patient-name" class="form-control-search" style="padding-left: 1rem;" placeholder="Enter patient's name" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="booking-patient-phone">Phone Number</label>
+            <input type="tel" id="booking-patient-phone" class="form-control-search" style="padding-left: 1rem;" placeholder="e.g. +91 98765 43210" required />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;" class="form-group">
+            <div>
+              <label class="form-label" for="booking-date-input">Preferred Date</label>
+              <input type="date" id="booking-date-input" class="filter-select" style="width: 100%;" required />
+            </div>
+            <div>
+              <label class="form-label" for="booking-time-slot">Preferred Slot</label>
+              <select id="booking-time-slot" class="filter-select" style="width: 100%;">
+                <option value="Morning (09:00 AM - 12:00 PM)">Morning (09:00 AM - 12:00 PM)</option>
+                <option value="Afternoon (12:00 PM - 04:00 PM)">Afternoon (12:00 PM - 04:00 PM)</option>
+                <option value="Evening (05:00 PM - 08:30 PM)" selected>Evening (05:00 PM - 08:30 PM)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="booking-consult-type">Consultation Type</label>
+            <select id="booking-consult-type" class="filter-select" style="width: 100%;">
+              <option value="In-Person Clinic Visit" selected>🏥 In-Person Clinic Visit</option>
+              <option value="Telehealth Video Consultation">📹 Telehealth Video Consultation</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.95rem;">
+            Confirm Consultation Request
+          </button>
+        </div>
+
+        <div id="booking-confirmation-box" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B. Database Engine Settings Modal -->
+  <div class="modal-backdrop" id="db-settings-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Database Engine &amp; MySQL Configuration</h3>
+        <button class="modal-close-btn db-modal-close" type="button">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          MediGuide supports <strong>MySQL 8.0+</strong> (via <code>mysql-connector-python</code>) with an automatic <strong>SQLite</strong> fallback. You can test your local MySQL connection or switch engines here.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="db-cfg-host">MySQL Host</label>
+          <input type="text" id="db-cfg-host" class="form-control-search" style="padding-left: 1rem;" value="localhost" />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;" class="form-group">
+          <div>
+            <label class="form-label" for="db-cfg-user">MySQL User</label>
+            <input type="text" id="db-cfg-user" class="form-control-search" style="padding-left: 1rem;" value="root" />
+          </div>
+          <div>
+            <label class="form-label" for="db-cfg-port">Port</label>
+            <input type="number" id="db-cfg-port" class="form-control-search" style="padding-left: 1rem;" value="3306" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="db-cfg-password">MySQL Password</label>
+          <input type="password" id="db-cfg-password" class="form-control-search" style="padding-left: 1rem;" placeholder="Enter MySQL root password" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="db-cfg-database">Database Name</label>
+          <input type="text" id="db-cfg-database" class="form-control-search" style="padding-left: 1rem;" value="mediguide_db" />
+        </div>
+
+        <div id="db-feedback-msg" style="margin-bottom: 1rem; font-size: 0.88rem;"></div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" class="btn btn-outline" id="btn-test-mysql">
+            Test Connection
+          </button>
+          <button type="button" class="btn btn-primary" id="btn-switch-mysql">
+            Switch &amp; Sync to MySQL
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C. Emergency Hotlines Directory Modal -->
+  <div class="modal-backdrop" id="emergency-modal">
+    <div class="modal-dialog">
+      <div class="modal-header" style="background: #881337; color: #fff;">
+        <h3 class="modal-title" style="color: #fff;">Emergency Medical Hotlines</h3>
+        <button class="modal-close-btn emergency-modal-close" style="color: #fff;" type="button">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 1.25rem;">
+          If someone is experiencing crushing chest pain, difficulty breathing, sudden stroke signs (FAST), severe uncontrolled bleeding, or loss of consciousness, dial your local emergency services immediately:
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.95rem; background: var(--surface-card-subtle); border: 1px solid var(--border-glass); border-radius: var(--radius-md);">
+            <div>
+              <strong>India — National Emergency</strong>
+              <div style="font-size: 0.8rem; color: var(--text-dim);">All-in-one Emergency Helpline</div>
+            </div>
+            <a href="tel:112" class="btn btn-danger" style="padding: 0.45rem 1.1rem; font-size: 0.9rem;">Call 112</a>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.95rem; background: var(--surface-card-subtle); border: 1px solid var(--border-glass); border-radius: var(--radius-md);">
+            <div>
+              <strong>India — Ambulance Emergency</strong>
+              <div style="font-size: 0.8rem; color: var(--text-dim);">Direct Ambulance Dispatch</div>
+            </div>
+            <a href="tel:108" class="btn btn-danger" style="padding: 0.45rem 1.1rem; font-size: 0.9rem;">Call 108 / 102</a>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.95rem; background: var(--surface-card-subtle); border: 1px solid var(--border-glass); border-radius: var(--radius-md);">
+            <div>
+              <strong>United States &amp; Canada</strong>
+              <div style="font-size: 0.8rem; color: var(--text-dim);">Emergency 911</div>
+            </div>
+            <a href="tel:911" class="btn btn-danger" style="padding: 0.45rem 1.1rem; font-size: 0.9rem;">Call 911</a>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.95rem; background: var(--surface-card-subtle); border: 1px solid var(--border-glass); border-radius: var(--radius-md);">
+            <div>
+              <strong>United Kingdom</strong>
+              <div style="font-size: 0.8rem; color: var(--text-dim);">Emergency 999</div>
+            </div>
+            <a href="tel:999" class="btn btn-danger" style="padding: 0.45rem 1.1rem; font-size: 0.9rem;">Call 999</a>
+          </div>
+        </div>
+
+        <div style="background: rgba(136, 19, 55, 0.25); border: 1px solid rgba(244, 63, 94, 0.4); border-radius: var(--radius-md); padding: 1.1rem; font-size: 0.88rem; color: #fda4af;">
+          <strong>FAST Stroke Reminder:</strong>
+          <br><strong>F</strong>ace: Is one side drooping?
+          <br><strong>A</strong>rms: Can the person raise both arms?
+          <br><strong>S</strong>peech: Is speech slurred or strange?
+          <br><strong>T</strong>ime: Call emergency services immediately.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline emergency-modal-close" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <h4>MediGuide 🏥</h4>
+        <p>
+          Smart healthcare symptom guidance website providing transparent, rule-based care navigation to connect individuals with the appropriate medical specialty.
+        </p>
+        <div class="footer-disclaimer-box">
+          <strong>Key Medical Principle:</strong> MediGuide does not produce automated disease diagnoses. All guidance outputs represent triage routing suggestions based on transparent clinical heuristics.
+        </div>
+      </div>
+
+      <div>
+        <h5 class="footer-title">Navigation</h5>
+        <ul class="footer-links">
+          <li><a href="#interactive-body-section">Body Hologram Scanner</a></li>
+          <li><a href="#symptom-form-section">Symptom Checker</a></li>
+          <li><a href="#care-guidance-section">Specialist Guidance</a></li>
+          <li><a href="#find-doctors-section">Nearby Doctor Discovery</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5 class="footer-title">Top Specialties</h5>
+        <ul class="footer-links">
+          <li><a href="#find-doctors-section" onclick="window.doctorFinderController.loadDoctors('general_physician')">General Physician</a></li>
+          <li><a href="#find-doctors-section" onclick="window.doctorFinderController.loadDoctors('cardiologist')">Cardiologist</a></li>
+          <li><a href="#find-doctors-section" onclick="window.doctorFinderController.loadDoctors('neurologist')">Neurologist</a></li>
+          <li><a href="#find-doctors-section" onclick="window.doctorFinderController.loadDoctors('pulmonologist')">Pulmonologist</a></li>
+          <li><a href="#find-doctors-section" onclick="window.doctorFinderController.loadDoctors('orthopedist')">Orthopedic Specialist</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5 class="footer-title">Emergency Hotline</h5>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          In case of severe acute symptoms:
+        </p>
+        <a href="tel:112" class="btn btn-danger" style="display: inline-flex; width: 100%; text-align: center;">
+          🚨 Call 112 / 911
+        </a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div>&copy; 2026 MediGuide Healthcare Navigation. Built for Keerthana. All rights reserved.</div>
+      <div>Futuristic Neo-Biomedical Design with Python Flask &amp; MySQL.</div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/static/js/i18n.js"></script>
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/body-diagram.js"></script>
+  <script src="/static/js/symptom-form.js"></script>
+  <script src="/static/js/guidance.js"></script>
+  <script src="/static/js/doctor-finder.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

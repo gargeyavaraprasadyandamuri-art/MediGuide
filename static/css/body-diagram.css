@@ -1,0 +1,404 @@
+/* ========================================================
+   MediGuide — Biometric Hologram Body Scanner Styles
+   Laser Scan Beam, Organ System Filters & HUD Telemetry
+   ======================================================== */
+
+.body-diagram-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.diagram-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Perspective Toggle (Front vs Back) */
+.view-toggle-group {
+  display: inline-flex;
+  background: var(--surface-card-subtle);
+  padding: 0.25rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-glass);
+}
+
+.view-toggle-btn {
+  padding: 0.45rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.view-toggle-btn.active {
+  background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--primary) 100%);
+  color: #070b14;
+  box-shadow: 0 0 14px var(--neon-cyan-glow);
+}
+
+/* Organ System Filter Ribbon */
+.organ-systems-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding-bottom: 0.65rem;
+  margin-bottom: 1rem;
+  scrollbar-width: thin;
+}
+
+.organ-systems-nav::-webkit-scrollbar {
+  height: 4px;
+}
+.organ-systems-nav::-webkit-scrollbar-thumb {
+  background: var(--border-glass);
+  border-radius: var(--radius-full);
+}
+
+.system-tab-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: var(--surface-card-subtle);
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.system-tab-btn:hover {
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  background: var(--surface-card-hover);
+}
+
+.system-tab-btn.active {
+  background: var(--primary-light);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 12px var(--neon-cyan-glow);
+}
+
+/* Hologram Body Canvas Container */
+.diagram-canvas-container {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.08) 0%, rgba(7, 11, 20, 0.95) 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .diagram-canvas-container {
+  background: radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.06) 0%, rgba(241, 245, 249, 0.9) 100%);
+}
+
+/* Unique Laser Scanner Beam */
+.hologram-scanner-beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--neon-cyan) 50%, transparent 100%);
+  box-shadow: 0 0 16px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+  pointer-events: none;
+  z-index: 10;
+  animation: laser-scan 4s infinite ease-in-out;
+}
+
+@keyframes laser-scan {
+  0% {
+    top: 5%;
+    opacity: 0.3;
+  }
+  50% {
+    top: 92%;
+    opacity: 0.95;
+  }
+  100% {
+    top: 5%;
+    opacity: 0.3;
+  }
+}
+
+/* HUD Overlay Crosshairs in Corners */
+.diagram-canvas-container::before {
+  content: '+';
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  opacity: 0.6;
+}
+
+.diagram-canvas-container::after {
+  content: '+';
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  opacity: 0.6;
+}
+
+/* SVG Body Rendering */
+.body-svg-wrapper {
+  width: 100%;
+  max-width: 320px;
+  height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.body-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 18px rgba(0, 242, 254, 0.25));
+}
+
+.body-silhouette-base {
+  fill: rgba(30, 41, 59, 0.65);
+  stroke: rgba(56, 189, 248, 0.35);
+  stroke-width: 1.5;
+  transition: all var(--transition-normal);
+}
+
+[data-theme="light"] .body-silhouette-base {
+  fill: #e2e8f0;
+  stroke: #94a3b8;
+}
+
+/* Interactive Hotspot Regions */
+.body-region {
+  cursor: pointer;
+  fill: rgba(56, 189, 248, 0.12);
+  stroke: rgba(56, 189, 248, 0.55);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 2;
+  transition: all var(--transition-normal);
+}
+
+.body-region:hover {
+  fill: rgba(0, 242, 254, 0.38);
+  stroke: var(--neon-cyan);
+  stroke-width: 2.5;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 14px var(--neon-cyan-glow));
+}
+
+.body-region.active-selected {
+  fill: rgba(0, 242, 254, 0.52);
+  stroke: #ffffff;
+  stroke-width: 3;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 20px var(--neon-cyan));
+  animation: pulse-selected-region 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse-selected-region {
+  0%, 100% {
+    fill: rgba(0, 242, 254, 0.45);
+    stroke: #ffffff;
+  }
+  50% {
+    fill: rgba(0, 242, 254, 0.7);
+    stroke: var(--neon-cyan);
+  }
+}
+
+/* Pulsing Biometric Vital Nodes on Organs */
+.vital-node {
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.vital-node circle.core {
+  fill: var(--neon-cyan);
+  filter: drop-shadow(0 0 8px var(--neon-cyan));
+}
+
+.vital-node circle.ping {
+  fill: none;
+  stroke: var(--neon-cyan);
+  stroke-width: 1.5;
+  animation: node-ping 2s infinite cubic-bezier(0, 0, 0.2, 1);
+}
+
+@keyframes node-ping {
+  0% { r: 6; opacity: 1; }
+  100% { r: 18; opacity: 0; }
+}
+
+/* Floating Tooltip */
+.body-zone-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(7, 11, 20, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--neon-cyan);
+  font-size: 0.84rem;
+  font-weight: 700;
+  box-shadow: 0 0 20px var(--neon-cyan-glow);
+  z-index: 100;
+  white-space: nowrap;
+  transform: translate(-50%, -120%);
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.body-zone-tooltip.show {
+  opacity: 1;
+  transform: translate(-50%, -135%);
+}
+
+.body-zone-tooltip .tip-badge {
+  background: var(--neon-cyan);
+  color: #070b14;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-full);
+}
+
+/* Futuristic Biometric HUD Readout Panel */
+.selected-area-banner {
+  margin-top: 1.25rem;
+  background: var(--surface-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: var(--shadow-holo);
+  position: relative;
+  overflow: hidden;
+}
+
+.selected-area-banner::after {
+  content: 'BIOMETRIC SCAN HUD';
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--neon-cyan);
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.selected-area-details {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+}
+
+.selected-area-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--primary-light);
+  border: 1px solid var(--border-glass);
+  color: var(--neon-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px var(--neon-cyan-glow);
+}
+
+.selected-area-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-heading);
+}
+
+.selected-area-desc {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.btn-filter-area {
+  background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--primary) 100%);
+  color: #070b14;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 800;
+  white-space: nowrap;
+  box-shadow: 0 0 14px var(--neon-cyan-glow);
+  transition: all var(--transition-fast);
+}
+
+.btn-filter-area:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px var(--neon-cyan);
+}
+
+/* Anatomical Regions Quick Pills */
+.body-part-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.part-pill-btn {
+  padding: 0.38rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: var(--surface-card-subtle);
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+
+.part-pill-btn:hover {
+  background: var(--surface-card-hover);
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+}
+
+.part-pill-btn.active {
+  background: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  color: #070b14;
+  box-shadow: 0 0 14px var(--neon-cyan-glow);
+}
